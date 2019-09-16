@@ -46,11 +46,9 @@ public class Customer implements Serializable {
     private String lastName; 
 
     @ManyToMany(cascade = {CascadeType.PERSIST})
-    @JoinTable(
-        name = "LINK_CUSTOMER_ADDRESS", 
-        joinColumns = @JoinColumn(name = "customer_id"), 
-        inverseJoinColumns = @JoinColumn(name = "address_id"))
-    private Set<Address> adresses = new HashSet();
+    private List<Address> adresses = new ArrayList();
+    // Jeg brugte først en liste, men har lavet et Set for at undgå duplikater
+    // Desværre har det ikke hjulpet.
 
 
     public Customer(String firstName, String lastName) {
@@ -79,7 +77,7 @@ public class Customer implements Serializable {
     
     public void addAddress(Address address){       
         this.adresses.add(address);
-        address.getCustomers().add(this);      
+        address.getCustomers().add(this);     
     }
 
     @Override
@@ -87,7 +85,7 @@ public class Customer implements Serializable {
         return "Customer{" + "customer_id=" + customer_id + ", firstName=" + firstName + ", lastName=" + lastName + '}';
     }
 
-    public Set<Address> getAddresses(){
+    public List<Address> getAddresses(){
         return this.adresses;
     }
     

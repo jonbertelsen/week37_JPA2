@@ -5,6 +5,8 @@
  */
 package week37.jpa2.facade;
 
+import week37.jpa2.entities.Customer;
+import week37.jpa2.entities.Address;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,7 +16,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import week37.jpa2.entities.Customer;
+
 
 /**
  *
@@ -39,11 +41,11 @@ public class CustomerFacade {
         }
     }
     
-    public static Set<Customer> getCustomers() {
+    public static List<Customer> getCustomers() {
         EntityManager em = emf.createEntityManager();
         
         Query query = em.createQuery("Select c from Customer c");
-        Set<Customer> customers = new HashSet(query.getResultList());
+        List<Customer> customers =query.getResultList();
         em.close();         
         return customers;
     }
@@ -60,6 +62,20 @@ public class CustomerFacade {
         }  
     }
 
+       public static Customer addAddress(Customer cust, Address a){
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            cust.addAddress(a);
+            em.merge(cust);
+            em.getTransaction().commit();
+            return cust;
+        } finally {
+            em.close();
+        }  
+    }
+
+    
     public static Customer deleteCustomer(int id){
         Customer cust = getCustomer(id);
         if (cust != null){

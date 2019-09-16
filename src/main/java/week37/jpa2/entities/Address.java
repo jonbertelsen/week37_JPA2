@@ -6,7 +6,9 @@
 package week37.jpa2.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -45,8 +47,8 @@ public class Address implements Serializable {
         return "Address{" + "id=" + id + ", street=" + street + ", city=" + city + '}';
     }
     
-    @ManyToMany(mappedBy = "adresses", cascade = CascadeType.PERSIST)
-    private Set<Customer> customers  = new HashSet();
+    @ManyToMany(mappedBy = "adresses")
+    private List<Customer> customers  = new ArrayList();
   
     public Long getId() {
         return id;
@@ -78,7 +80,7 @@ public class Address implements Serializable {
         customer.getAddresses().add(this);
     }  
 
-    public Set<Customer> getCustomers() {
+    public List<Customer> getCustomers() {
         return customers;
     }
 
